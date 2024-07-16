@@ -64,7 +64,7 @@ userSchema.pre("save", async function (next) {
 });
 
 userSchema.methods.isPasswordCorrect = async function (password) {
-    return await this.compare(password, this.password);
+    return this.compare(password, this.password);
 };
 
 userSchema.methods.generateAcessToken = async function (password) {
