@@ -8,7 +8,6 @@ const registerUser = asyncHandler(async (req, res) => {
 
     // get user details from frontend
     const { fullName, email, username, password } = req.body;
-    console.log("email: ", email);
 
 
     // validation - not empty
@@ -19,16 +18,16 @@ const registerUser = asyncHandler(async (req, res) => {
     }
 
     // const existingUsername = User.findOne({
-    //     $or: [{ username }]
+    //     $or: [{ email }, { username }]
     // });
 
 
     // check if user already exists: username, email
-    const existingUsername = User.findOne({
+    const existingUsername = await User.findOne({
         username
     });
 
-    const existingEmail = User.findOne({
+    const existingEmail = await User.findOne({
         email
     });
 
@@ -54,6 +53,7 @@ const registerUser = asyncHandler(async (req, res) => {
 
     // create user object - create entry in db
     const user = await User.create({
+        fullName: fullName.toLowerCase(),
         avatar: avatar.url,
         coverImage: coverImage?.url || "",
         email,
@@ -63,7 +63,7 @@ const registerUser = asyncHandler(async (req, res) => {
 
 
     // remove hashed password and refresh token field from response
-    const createdUser = User.find(user._id).select(
+    const createdUser = await User.findById(user._id).select(
         "-password -refreshTokens"
     );
 
