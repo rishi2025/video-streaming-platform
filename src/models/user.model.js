@@ -64,11 +64,11 @@ userSchema.pre("save", async function (next) {
 });
 
 userSchema.methods.isPasswordCorrect = async function (password) {
-    return this.compare(password, this.password);
+    return await bcrypt.compare(password, this.password);
 };
 
-userSchema.methods.generateAcessToken = async function (password) {
-    jwt.sign(
+userSchema.methods.generateAcessToken = function () {
+    return jwt.sign(
         {
             _id: this._id,
             email: this.email,
@@ -82,14 +82,14 @@ userSchema.methods.generateAcessToken = async function (password) {
     )
 };
 
-userSchema.methods.generateRefreshToken = async function (password) {
-    jwt.sign(
+userSchema.methods.generateRefreshToken = function () {
+    return jwt.sign(
         {
             _id: this._id,
         },
         process.env.REFRESH_TOKEN_SECRET,
         {
-            expiresIn: process.env.REFERSH_TOKEN_EXPIRY,
+            expiresIn: process.env.REFRESH_TOKEN_EXPIRY,
         }
     )
 };
