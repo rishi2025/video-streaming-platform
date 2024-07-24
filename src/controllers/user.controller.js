@@ -249,10 +249,12 @@ const getCurrentUser = asyncHandler(async (req, res) => {
     return res
         .status(200)
         .json(
-            200,
-            req.user,
-            "Current user fetcjed successfully"
-        )
+            new ApiResponse(
+                200,
+                req.user,
+                "Current user fetched successfully"
+            )
+        );
 });
 
 const updateAccountDetails = asyncHandler(async (req, res) => {
@@ -274,7 +276,7 @@ const updateAccountDetails = asyncHandler(async (req, res) => {
 
     return res
         .status(200)
-        .json(200, user, "Account details updated...");
+        .json(new ApiResponse(200, user, "Account details updated..."));
 });
 
 const updateUserAvatar = asyncHandler(async (req, res) => {
